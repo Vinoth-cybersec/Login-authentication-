@@ -1,0 +1,73 @@
+import bcrypt
+import os
+
+# File to store user credentials
+USER_DATA_FILE = "users.txt"
+
+# Function to register a new user
+def register():
+    username = input("Enter a username: ")
+    password = input("Enter a password: ")
+
+    # Hash the password
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+    # Check if the user already exists
+    if user_exists(username):
+        print("Username already exists! Please try another.")
+        return
+
+    # Store the new user credentials
+    with open(USER_DATA_FILE, "a") as file:
+        file.write(f"{username},{hashed.decode('utf-8')}\n")
+
+    print("User registered successfully!")
+
+# Function to check if a username exists
+def user_exists(username):
+    if os.path.exists(USER_DATA_FILE):
+        with open(USER_DATA_FILE, "r") as file:
+            for line in file:
+                stored_username, _ = line.strip().split(',')
+                if stored_username == username:
+                    return True
+    return False
+
+# Function for user login
+def login():
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+
+    if not user_exists(username):
+        print("Username not found!")
+        return
+
+    # Check credentials
+    with open(USER_DATA_FILE, "r") as file:
+        for line in file:
+            stored_username, stored_password = line.strip().split(',')
+            if stored_username == username:
+                if bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
+                    print("Login successful!")
+                else:
+                    print("Incorrect password!")
+                return
+
+# Main loop to handle user input
+def main():
+    while True:
+        print("\n1. Register\n2. Login\n3. Exit")
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            register()
+        elif choice == "2":
+            login()
+        elif choice == "3":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice! Try again.")
+
+if __name__ == "__main__":
+    main()
