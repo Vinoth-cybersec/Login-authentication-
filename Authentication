@@ -1,0 +1,19 @@
+# Python Login Authentication System
+
+A simple Python-based login system with user registration and login functionality, using bcrypt for password hashing.
+
+## Features
+
+- **User Registration**: Allows new users to register with a username and password.
+- **User Login**: Validates existing users' credentials and allows them to log in.
+- **Password Hashing**: Uses `bcrypt` to securely hash user passwords before storing them.
+
+## Prerequisites
+
+- Python 3.x
+- `bcrypt` library (for password hashing)
+
+You can install the `bcrypt` library via pip:
+
+```bash
+pip install bcrypt
